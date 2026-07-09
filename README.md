@@ -449,16 +449,12 @@ Solutions:
 ---
 
 ## 💡 Key Contributions
-
 ### 1. Practical Research for Educational Implementation
-
 ```
 Before: Facial emotion = Concentration (oversimplified)
 Now: Emotion + Angle + Screen Gaze = Precise concentration
 ```
-
 ### 2. East Asian Data Bias Resolution
-
 ```
 Standard Model (Western data only):
 FER2013 → 60.4% accuracy
@@ -467,21 +463,15 @@ Applied to Asians → 26.4% (FAIL)
 Improved Model (Multi-dataset):
 FER2013 + KFE + JAFFE → 32.8% on Korean faces ✅
 ```
-
 ### 3. End-to-End ITS Implementation
-
 Single research project → Complete system (servers + DB + UI)
-
 ### 4. Evidence-Based Validation
-
 Student usability testing (N=20) with qualitative interviews
-
 ---
 
 ## 🛠 Technology Stack
 
 ### Deep Learning & Computer Vision
-
 ```
 TensorFlow 2.x + Keras
 CNN: Xception (Inception improvement)
@@ -489,27 +479,21 @@ Transfer Learning: ImageNet pre-trained weights
 OpenCV: Face detection & landmark extraction
 MediaPipe: Real-time facial keypoints (optional)
 ```
-
 ### Backend & Inference
-
 ```
 Python 3.8+
 Flask/FastAPI for API server
 GPU inference server (NVIDIA CUDA)
 MySQL for data persistence
 ```
-
 ### Frontend
-
 ```
 Java Spring Boot + Tomcat
 Responsive web interface
 WebSocket for real-time updates
 Dashboard visualization
 ```
-
 ### Datasets
-
 ```
 FER2013: 35,887 images (Western faces)
 KFE: Korean emotional face dataset (AIHub)
@@ -519,7 +503,6 @@ JAFFE: Japanese facial expressions
 ---
 
 ## 📚 Related Work & References
-
 ### Foundational Research
 
 | Paper | Year | Contribution |
@@ -533,7 +516,6 @@ JAFFE: Japanese facial expressions
 - **FER2013 Dataset**: [Kaggle FER2013](https://www.kaggle.com/datasets/deadskull7/fer2013)
 - **Korean Dataset**: [AIHub](https://aihub.or.kr/)
 - **Xception Paper**: [Chollet, F. (2016)](https://arxiv.org/abs/1610.02357)
-
 ---
 
 ## 📖 Citation
@@ -561,10 +543,10 @@ Lee, J. H., & Song, K. S. (2025). Development and usability evaluation of ITS re
 
 ## 🔗 Links & Resources
 
-- 📄 **Original Paper**: [KACE Journal](https://www.kace.or.kr)
+- 📄 **Original Paper**: [KACE Journal](https://journal.kace.re.kr/xml/43892/43892.pdf)
 - 📊 **Korean Dataset**: [AIHub](https://aihub.or.kr/)
-- 🧠 **Xception Architecture**: [arXiv](https://arxiv.org/abs/1610.02357)
-- 📈 **Model Comparison Results**: [results/metrics/](results/metrics/)
+- 🧠 **Xception Architecture**: [arXiv](https://arxiv.org/abs/1610.02357)- 
+- 📈 **Model Comparison Results**: [UJASEIT](https://ijaseit.insightsociety.org/index.php/ijaseit/article/view/18078)
 
 ---
 
@@ -573,18 +555,10 @@ Lee, J. H., & Song, K. S. (2025). Development and usability evaluation of ITS re
 **Jun-Hyeong Lee** (이준형)
 
 - Affiliation: Korea National University of Education, Graduate School of Computer Education
-- Email: jhlee77@knue.ac.kr
+- Email: yjhboky@gmail.com
 - GitHub: [@ljh77](https://github.com/ljh77)
 
 ---
-
-## 📄 License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
 
 **⭐ If this project helped you, please consider giving it a star!**
 

@@ -65,11 +65,13 @@ Training Data = {
 }
 ```
 Model Selection & Comparison
+
 Model	FER2013	KFE (Korean)	JAFFE	Selected
 Xception	61.9%	32.8%	31.5%	✅ BEST
 VGG16	62.7%	23.5%	29.1%	
 DenseNet121	52.9%	25.3%	37.6%	
 ResNet50 V2	49.2%	19.4%	22.5%	
+
 Why Xception?
 Improved Inception architecture
 Uses Depthwise Separable Convolution

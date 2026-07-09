@@ -3,7 +3,6 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
 [![TensorFlow 2.x](https://img.shields.io/badge/tensorflow-2.x-orange)](https://tensorflow.org)
 [![Keras](https://img.shields.io/badge/keras-2.13-red)](https://keras.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Paper: KACE 2025](https://img.shields.io/badge/Paper-KACE%202025-brightgreen)](https://doi.org/10.32431/kace.2025.28.1.002)
 
 ---

@@ -12,11 +12,13 @@ Real-Time Learner Concentration Detection ITS
 An Intelligent Tutoring System (ITS) that detects real-time learner concentration by analyzing facial emotions, head pose, and screen gaze using improved Xception CNN. This research addresses the limitation of prior work that simply mapped facial emotions to concentration levels, proposing a more comprehensive approach combining multiple behavioral indicators for precise concentration assessment.
 
 🎯 Key Achievements
+
 Aspect	Result
 Model Accuracy	KFE Dataset 32.8%, FER2013 61.9%
 System Architecture	2-Server Setup (Web + Computation Server)
 Real-Time Processing	Multi-user simultaneous handling
 Usability Evaluation	Interface 3.58/5.0, Learning Support 3.82/5.0
+
 ---
 🔬 Technical Background
 Intelligent Tutoring System (ITS) - 4 Core Components

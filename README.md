@@ -552,7 +552,7 @@ Lee, J. H., & Song, K. S. (2025). Development and usability evaluation of ITS re
 
 **Jun-Hyeong Lee** (이준형)
 
-- Affiliation: Korea National University of Education, Graduate School of Computer Education
+- Affiliation: Korea National University of Education, Ph.d Computer Education
 - Email: yjhboky@gmail.com
 - GitHub: [@ljh77](https://github.com/ljh77)
 

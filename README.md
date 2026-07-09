@@ -1,406 +1,431 @@
 # learner-concentration-its-24
 Real-time learner concentration detection using CNN facial emotion recognition
 
-딥러닝 얼굴 감정 인식을 활용한 실시간 학습자 집중도 판별 ITS
+Real-Time Learner Concentration Detection ITS
 ![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue)
 ![TensorFlow 2.x](https://img.shields.io/badge/tensorflow-2.x-orange)
 ![Keras](https://img.shields.io/badge/keras-2.13-red)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Paper: KACE 2025](https://img.shields.io/badge/Paper-KACE%202025-brightgreen)
 ---
-📌 프로젝트 개요
-AI 기반 교육 보조 기술의 실무화를 위해 딥러닝 얼굴 감정 인식 기술을 활용하여 **실시간 학습자 집중도를 판별하는 지능형 교수 시스템(ITS)**을 설계·구현하고 사용성을 평가한 연구입니다.
-기존 연구들이 얼굴 감정을 단순히 집중도로 치환했던 한계를 극복하기 위해, 감정 인식 + 얼굴 각도 + 화면 응시를 복합적으로 분석하여 더욱 정밀한 집중도 판별이 가능하게 했습니다.
-🎯 핵심 성과
-항목	결과
-모델 정확도	KFE 데이터셋 32.8%, FER2013 61.9%
-시스템 구조	2-서버 아키텍처 (웹 + 연산 서버)
-실시간 처리	다중 사용자 동시 처리 가능
-사용성 평가	인터페이스 3.58/5.0, 학습지원 3.82/5.0
+📌 Project Overview
+An Intelligent Tutoring System (ITS) that detects real-time learner concentration by analyzing facial emotions, head pose, and screen gaze using improved Xception CNN. This research addresses the limitation of prior work that simply mapped facial emotions to concentration levels, proposing a more comprehensive approach combining multiple behavioral indicators for precise concentration assessment.
+🎯 Key Achievements
+Aspect	Result
+Model Accuracy	KFE Dataset 32.8%, FER2013 61.9%
+System Architecture	2-Server Setup (Web + Computation Server)
+Real-Time Processing	Multi-user simultaneous handling
+Usability Evaluation	Interface 3.58/5.0, Learning Support 3.82/5.0
 ---
-🔬 기술적 배경
-지능형 교수 시스템(ITS)의 4가지 구성요소
-ITS의 기본 원리에 따라 시스템을 4가지 모듈로 구성했습니다:
+🔬 Technical Background
+Intelligent Tutoring System (ITS) - 4 Core Components
+The system is structured based on ITS principles with 4 functional modules:
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    Interface Module                          │
-│        (학습자/교수자 인터페이스, 데이터 수집/확인)          │
+│      (User Interface for Learners & Instructors)            │
 ├─────────────────────────────────────────────────────────────┤
-│  Expert Module      │  Tutoring Module    │  Student Module  │
-│  (학습 분석)        │  (피드백 전략)      │  (데이터 관리)  │
+│  Expert Module      │  Tutoring Module    │  Student Module │
+│  (State Analysis)   │  (Feedback)         │  (Data Mgmt)   │
 └─────────────────────────────────────────────────────────────┘
 ```
-전문가 모듈(Expert Module): 학습자의 집중 상태 분석
-얼굴 감정 인식 (7가지 감정)
-얼굴 각도 분석
-화면 응시 여부 판단
-학습자 모듈(Student Module): 실시간 데이터 수집
-웹캠으로부터 얼굴 이미지 영상 캡처
-초 단위로 서버에 전송
-교수 모듈(Tutoring Module): 피드백 생성
-집중도 저하 시 자동 메시지 출력
-교수자용 전체 집중도 현황 제공
-인터페이스 모듈(Interface Module): 양방향 커뮤니케이션
-학습자: 개인의 집중도 실시간 확인
-교수자: 전체 학생의 집중도 현황 모니터링
+1. Expert Module: Concentration State Analysis
+7-class facial emotion recognition
+Head pose/yaw angle estimation
+Screen gaze detection
+2. Student Module: Real-Time Data Collection
+Webcam-based facial image capture
+Second-by-second server transmission
+Database logging
+3. Tutoring Module: Feedback Generation
+Automated low-concentration alerts
+Instructor dashboard with class-wide metrics
+4. Interface Module: Bidirectional Communication
+Learner Dashboard: Individual concentration visualization
+Instructor Dashboard: Real-time monitoring of all students
 ---
-🧠 딥러닝 모델: 개선된 Xception
-동양인 얼굴 데이터셋의 편향성 문제 해결
-기존 연구에서 발견한 문제점:
-FER2013(서양인 데이터): 60.4% 정확도
-이를 동양인에게 적용: 26.4%로 급격히 저하 (편향성)
-해결책: 동양인 얼굴 데이터셋 추가 + CNN 모델 개선
+🧠 Deep Learning Model: Improved Xception
+Addressing Data Bias in East Asian Faces
+Problem Identified:
+FER2013 (Western faces): 60.4% accuracy
+Applied to East Asian faces: 26.4% (severe degradation)
+Root cause: Dataset bias from Western-centric training data
+Solution Implemented:
+Multi-dataset training combining Western + East Asian + Japanese data
+CNN model improvement via Xception architecture
 ```python
-# 학습에 사용된 데이터셋
-데이터셋 조합:
-├─ FER2013 (서양인)
-├─ KFE (한국인 감정 이미지)
-└─ JAFFE (일본인)
+# Datasets Used
+Training Data = {
+    "FER2013": Western facial expressions,
+    "KFE": Korean emotional faces (AIHub),
+    "JAFFE": Japanese facial expressions
+}
 ```
-Xception 모델 선택 이유
-모델	FER2013	KFE	JAFFE	선택
-Xception	61.9%	32.8%	31.5%	✅ 최우수
+Model Selection & Comparison
+Model	FER2013	KFE (Korean)	JAFFE	Selected
+Xception	61.9%	32.8%	31.5%	✅ BEST
 VGG16	62.7%	23.5%	29.1%	
 DenseNet121	52.9%	25.3%	37.6%	
 ResNet50 V2	49.2%	19.4%	22.5%	
-Xception의 장점:
-Inception 모델 개선
-깊이별 분리형 합성곱(Depthwise Separable Convolution) 사용
-더 효율적인 합성곱 연산 → 높은 성능
-모델 아키텍처
+Why Xception?
+Improved Inception architecture
+Uses Depthwise Separable Convolution
+More efficient feature extraction
+Superior performance on Korean faces
+Network Architecture
 ```
-입력 (48×48×3)
+Input (48×48×3)
     ↓
-[전이학습] ImageNet 가중치로 초기화
+[Transfer Learning] ImageNet Pre-trained Weights
     ↓
-[Xception 베이스] (처음 20레이어 동결, 나머지는 미세조정)
+[Xception Base] (Freeze first 20 layers, fine-tune rest)
     ↓
-[글로벌 평균 풀링]
+[Global Average Pooling]
     ↓
 [Dense 256] + BatchNorm + Dropout(0.3)
     ↓
 [Dense 128] + BatchNorm + Dropout(0.3)
     ↓
-[Dense 7] + Softmax → 7가지 감정 분류
+[Dense 7] + Softmax
     ↓
-출력: [분노, 혐오, 두려움, 행복, 중립, 슬픔, 놀람]
+Output: 7 Emotion Classes
+├─ Angry
+├─ Disgust
+├─ Fear
+├─ Happy
+├─ Neutral
+├─ Sad
+└─ Surprise
 ```
-학습 설정
+Training Configuration
 ```yaml
-배치 크기: 64
-에포크: 30
-학습률: 0.00001
-최적화기: Adam
-손실함수: Categorical Crossentropy
-클래스 가중치: 데이터 불균형 보정
-이미지 증강: 
-  - 회전: 0~20도
-  - 확대/축소: 0.3배율
-  - 기울기: 0.3
+Batch Size: 64
+Epochs: 30
+Learning Rate: 0.00001
+Optimizer: Adam
+Loss: Categorical Crossentropy
+Class Weighting: Enabled (handle imbalance)
+
+Data Augmentation:
+  Rotation: 0-20 degrees
+  Zoom: 0.3x scale
+  Horizontal Flip: Yes
+  Shear: 0.3
 ```
 ---
-📊 집중도 계산 공식
-조작적 정의(Operational Definition)
-학습자의 집중/비집중 상태를 다음 기준으로 판단합니다:
-집중도 레벨	얼굴 인식	얼굴 각도	감정 상태
-고집중	✅ 인식됨	정면 (0-15°)	행복, 놀람, 중립
-보통	✅ 인식됨	부분정면 (15-30°)	혐오, 분노, 슬픔
-저집중	❌ 미인식	옆면 (30-45°)	두려움, null
-최종 집중도 값 계산식
+📊 Concentration Score Calculation
+Operational Definition
+Learner concentration/non-concentration classification based on:
+Concentration Level	Face Detected	Face Angle	Emotion
+High	✅ Yes	Frontal (0-15°)	Happy, Surprise, Neutral
+Normal	✅ Yes	Partial (15-30°)	Anger, Disgust, Sadness
+Low	❌ No	Side (30-45°)	Fear, Null
+Concentration Formula
 ```
-최종 집중도 = (감정확률 × 감정가중치 / 5) × 각도보정 / 2.5 × 100
+Final Score = (Emotion Probability × Emotion Weight / 5) × Angle Correction / 2.5 × 100
 ```
-1️⃣ 감정별 가중치
+Step 1: Emotion Weights
 ```python
-감정 가중치 = {
-    "happy": 0.9,      # 긍정적 감정 → 높은 집중도
+Emotion_Weights = {
+    "happy": 0.9,       # Positive → High concentration
     "surprise": 0.8,
     "neutral": 0.7,
-    "angry": 0.3,      # 부정적 감정 → 낮은 집중도
+    "angry": 0.3,       # Negative → Low concentration
     "sad": 0.2,
     "fear": 0.1,
     "disgust": 0.2
 }
 ```
-2️⃣ 각도 보정 계수 (Yaw 각도)
+Step 2: Angle Correction (Yaw)
 ```python
-if |yaw| ≤ 0도:
-    보정 = 1.0        # 정면 (최고값)
-elif |yaw| < 15도:
-    보정 = 1.0
-elif |yaw| < 25도:
-    보정 = 0.1 + (25 - |yaw|) / 25 × 0.9   # 선형 감소
+if |yaw| ≤ 0°:
+    correction = 1.0           # Frontal (maximum)
+elif |yaw| < 15°:
+    correction = 1.0
+elif |yaw| < 25°:
+    correction = 0.1 + (25 - |yaw|) / 25 × 0.9   # Linear decay
 else:
-    보정 = 0.1        # 옆면 (최저값)
+    correction = 0.1           # Side view (minimum)
 ```
-3️⃣ 예시 계산
+Step 3: Example Calculation
 ```
-시나리오: 학습자가 행복한 표정으로 정면을 바라봄
-├─ 감정확률: 0.97 (97%)
-├─ 감정: happy → 가중치 0.9
-├─ Yaw 각도: 5° → 보정계수 1.0
-└─ 최종 = (0.97 × 0.9 / 5) × 1.0 / 2.5 × 100 = 69.84점
+Scenario 1: Student with happy expression, facing forward
+├─ Emotion Probability: 0.97 (97%)
+├─ Emotion: happy → Weight 0.9
+├─ Yaw Angle: 5° → Correction 1.0
+└─ Score = (0.97 × 0.9 / 5) × 1.0 / 2.5 × 100 = 69.84
 
-시나리오: 학습자가 필기하면서 고개를 숙임
-├─ 감정확률: 0.65
-├─ 감정: neutral → 가중치 0.7
-├─ Yaw 각도: 40° → 보정계수 0.1
-└─ 최종 = (0.65 × 0.7 / 5) × 0.1 / 2.5 × 100 = 3.64점
+Scenario 2: Student writing notes with head down
+├─ Emotion Probability: 0.65
+├─ Emotion: neutral → Weight 0.7
+├─ Yaw Angle: 40° → Correction 0.1
+└─ Score = (0.65 × 0.7 / 5) × 0.1 / 2.5 × 100 = 3.64
 ```
 ---
-🏗️ 시스템 아키텍처
-하드웨어 및 소프트웨어 구성
-웹 서버 (Front-end Server)
+🏗️ System Architecture
+Hardware & Software Stack
+Web Server (Front-End)
 ```yaml
-하드웨어:
+Hardware:
   CPU: Intel i9-7900X
-  메모리: 16GB
-  인터넷: 20Mbps
+  Memory: 16GB
+  Network: 20Mbps
   OS: Linux CentOS 8
 
-소프트웨어:
-  런타임: Java (반응형, 확장성)
-  프레임워크: Spring Boot (API 최적화)
-  웹서버: Tomcat
-  데이터베이스: MySQL
+Software:
+  Runtime: Java (responsive, scalable)
+  Framework: Spring Boot (API optimized)
+  Web Server: Tomcat
+  Database: MySQL
   IDE: Eclipse
 ```
-역할:
-학습자/교수자 인터페이스 제공
-이미지 데이터를 연산 서버로 전송 (API 통신)
-결과값을 데이터베이스에 저장 및 실시간 피드백
-연산 서버 (Back-end Server)
+Responsibilities:
+User interface for learners & instructors
+Forward images to computation server via API
+Store results in database
+Real-time dashboard updates
+Computation Server (Back-End)
 ```yaml
-하드웨어:
+Hardware:
   CPU: i7-12700
-  메모리: 32GB
+  Memory: 32GB
   GPU: RTX 2080Ti
-  인터넷: 500Mbps
+  Network: 500Mbps
 
-소프트웨어:
+Software:
   OS: Windows 10
-  언어: Python 3.8+
-  프레임워크: Keras/TensorFlow
+  Language: Python 3.8+
+  DL Framework: TensorFlow/Keras
   API: Univecon API
 ```
-역할:
-웹 서버로부터 수신한 이미지를 CNN으로 분석
-감정 분류 결과값을 웹 서버로 반송
-실시간 추론 (inference) 담당
-시스템 흐름도
+Responsibilities:
+Receive images from web server
+Run CNN inference on GPU
+Return emotion classification results
+Real-time processing
+System Workflow
 ```
-1. 학습자가 웹 브라우저에 접속
+1. Learner accesses web browser
    ↓
-2. 웹캠으로 얼굴 이미지 실시간 캡처
+2. Webcam captures facial images in real-time
    ↓
-3. 이미지를 웹 서버로 전송
+3. Images sent to web server
    ↓
-4. 웹 서버가 이미지를 연산 서버로 API 통신 (HTTP POST)
+4. Web server transmits images to computation server (API)
    ↓
-5. 연산 서버 (GPU)에서 CNN 모델 실행
-   - Xception으로 7가지 감정 분류
-   - 얼굴 각도 인식 (Yaw 계산)
+5. Computation server (GPU) runs CNN inference
+   ├─ Xception classifies 7 emotions
+   ├─ Face detection extracts yaw angle
+   └─ Confidence scores calculated
    ↓
-6. 분류 결과값을 웹 서버로 반송
+6. Results returned to web server
    ↓
-7. 웹 서버가 집중도 값 계산
+7. Web server calculates concentration score
    ↓
-8. 데이터베이스에 저장 (초 단위)
+8. Data stored in database (second-by-second)
    ↓
-9. 학습자/교수자 대시보드에 실시간 표시
-   ├─ 학습자: 개인의 집중도 그래프
-   └─ 교수자: 전체 학생의 집중도 현황
+9. Real-time dashboard displays results
+   ├─ Learner: Individual concentration graph
+   └─ Instructor: Class-wide concentration heatmap
 ```
 ---
-📈 실험 및 평가
-연구 참가자 (N=20)
+📈 Experimental Results & Evaluation
+Study Participants (N=20)
 ```
-성별:
-├─ 남: 9명
-└─ 여: 11명
-
-학년: 1~4학년 (대학생)
-
-나이: 20~25세
+Demographics:
+├─ Gender: Male 9, Female 11
+├─ Education: University students
+├─ Year: 1st-4th grade
+└─ Age: 20-25 years
 ```
-사용성 평가 결과
-각 영역별로 5점 척도로 평가 (크론바흐 알파 = 0.834 → 신뢰도 있음)
-1️⃣ 인터페이스 평가 (평균: 3.58/5.0)
-항목	점수	해석
-필요한 기능을 찾기 쉽다	3.8	⭐⭐⭐⭐ 우수
-시스템 정보를 쉽게 파악할 수 있다	3.7	⭐⭐⭐ 보통 이상
-직관적이고 사용하기 쉽다	3.65	⭐⭐⭐ 보통 이상
-반응 속도는 빠르고 원활하다	3.1	⭐⭐ 개선 필요
-해석: 웹과 기능은 직관적이나, 서버 반응 속도 개선이 필요
-2️⃣ 학습 지원 평가 (평균: 3.82/5.0)
-항목	점수	해석
-학습 동기가 향상되었다	3.9	⭐⭐⭐⭐ 효과적
-시스템이 학습에 도움이 된다	3.7	⭐⭐⭐ 보통 이상
-해석: 전반적으로 긍정적인 학습 지원 효과 (표준편차 1.17 → 개인차 존재)
-3️⃣ 시스템 안정성 평가 (평균: 2.61/5.0) ⚠️
-항목	점수	해석
-시스템이 안정적으로 동작한다	2.75	⚠️ 개선 필요
-시스템이 오류를 발생시키지 않는다	2.35	⚠️ 심각한 개선 필요
-문제점: 20명의 동시 영상 처리 시 서버 부하 n²로 기하급수적 증가
-한 학습자마다 영상 수신, 분석, 재송신 → 네트워크 부하
-동시 접속 증가 → 서버 일시적 먹통 현상
-학생 인터뷰 의견
-💬 긍정적 피드백
-> "교사 입장에서 학생들을 동시에 관리하기 어려울 때 매우 유용할 것 같다. 학생 입장에서는 자신을 성찰하고 더 나은 방향으로 개선할 수 있을 것 같다." - ㄴ학생
-> "학습자의 집중도를 손쉽게 점검할 수 있다는 점이 긍정적이며, 실제 교육에 적용한다면 더 통제된 학습 환경을 만들 수 있을 것 같다." - ㄷ학생
-> "자신의 모습을 수업 후에 확인하면서 학습을 성찰할 수 있다는 점이 만족스러웠다." - ㄹ학생
-⚠️ 비판적 의견
-> "정확도가 낮은 것 같다." - ㅁ학생
-> "화면을 보는 시간만으로 집중력을 계산하는 것은 열심히 필기하는 학생들에게 불공평할 수 있다." - ㅂ학생
-> "접속이 많아지자 시스템에 접속할 수 없었다." - ㅅ학생
+Usability Evaluation Results
+5-point Likert scale (Cronbach's α = 0.834 → Reliable)
+Interface Evaluation (Mean: 3.58/5.0)
+Item	Score	Interpretation
+Easy to find needed functions	3.8	⭐⭐⭐⭐ Excellent
+System information easily understood	3.7	⭐⭐⭐ Good
+Intuitive and user-friendly	3.65	⭐⭐⭐ Good
+Fast and smooth response time	3.1	⭐⭐ Needs Improvement
+Interpretation: UI is intuitive, but response time optimization needed
+Learning Support Evaluation (Mean: 3.82/5.0)
+Item	Score	Interpretation
+Learning motivation improved	3.9	⭐⭐⭐⭐ Effective
+System helps learning	3.7	⭐⭐⭐ Good
+Interpretation: Positive learning support effect overall (SD=1.17 shows individual differences)
+System Stability Evaluation (Mean: 2.61/5.0) ⚠️
+Item	Score	Interpretation
+System operates stably	2.75	⚠️ Needs Improvement
+Minimal errors	2.35	⚠️ Critical Improvement Needed
+Issue Identified:
+20 simultaneous video streams cause server load to increase exponentially (n²)
+Network bottleneck when processing increases
+Temporary system unavailability during peak load
+Student Interview Feedback
+💬 Positive Feedback
+> "From a teacher's perspective, this would be very useful when managing multiple students simultaneously. From a student's perspective, self-reflection enables continuous improvement." - Student L
+> "Being able to easily check learner concentration is positive. If applied to actual education, it could create a more controlled learning environment." - Student D
+> "Being able to review my own behavior after class and reflect on my learning was satisfying." - Student R
+⚠️ Critical Feedback
+> "Accuracy seems low." - Student M
+> "Calculating concentration based solely on screen time could be unfair to students who actively take notes." - Student B
+> "The system became inaccessible when too many users accessed it simultaneously." - Student S
 ---
-🔍 한계점 및 향후 연구 방향
-현재 시스템의 한계
-1️⃣ 다의적 행동 구분의 어려움
-학습자의 행동 맥락을 판단하지 못함:
+🔍 Limitations & Future Directions
+Current System Limitations
+1. Difficulty Distinguishing Contextual Actions
+System cannot discern intent behind identical behaviors:
 ```
-문제 상황:
-├─ 필기하기 위해 고개를 숙이는 행동 (집중) → 저집중으로 판별될 수 있음
-├─ 딴생각을 하면서 고개를 숙이는 행동 (산만) → 동일하게 저집중으로 판별
-└─ 무표정으로 정면을 응시하는 경우 (집중? 산만?)
+Problem Cases:
+├─ Head down for note-taking (focused) → Detected as low concentration
+├─ Head down due to distraction (unfocused) → Identical detection
+└─ Blank neutral expression (focused? unfocused?)
 ```
-개선 방향:
-행동의 맥락적 의도를 포함한 추가 데이터 수집
-더 세분화된 분류 기준 설정
-2️⃣ 온라인 실시간 시스템의 확장성 문제
+Improvement Strategy:
+Collect contextual behavioral data
+Implement action intent classification
+Refine operational definitions
+2. Scalability Issues in Real-Time System
 ```
-문제: 20명 동시 처리에서 이미 병목 현상 발생
+Problem: 20 simultaneous users already cause bottlenecks
 
-원인:
-├─ 연산: 20명 × 이미지 분석 = 20번 처리
-├─ 전송: 결과값을 다시 각 학습자에게 송신
-└─ 누적: 네트워크 통신량 = n² (기하급수적 증가)
+Root Causes:
+├─ Computation: 20 images × CNN inference = 20 GPU processes
+├─ Transmission: Results sent back to each user = n² network load
+└─ Cumulative: Exponential growth with user count
 
-해결책:
-├─ 전문 네트워크 시스템 개선
-├─ 최대 동시 처리 인원 제한
-├─ 로드 밸런싱 / 캐싱 도입
-└─ GPU 확충 또는 분산 처리
+Solutions:
+├─ Advanced network architecture
+├─ Max simultaneous user limits
+├─ Load balancing & caching
+└─ GPU cluster or distributed processing
 ```
-향후 연구 방향
-🔮 단기 개선 (6개월)
-행동 맥락 분석
-카메라 신호: 실시간 표정 + 행동 기록
-생리신호 추가: 심박수, 시선 추적
-머신러닝: 맥락을 포함한 라벨링 작업
-시스템 성능 최적화
-자동 페일백 기능
-분산 처리 (마이크로서비스)
-캐싱 및 병렬 처리
-📊 중기 연구 (1년)
-대규모 테스트
-온라인 대규모 강의 (100명+)
-소규모 토론 수업
-실제 학교 현장 적용
-피드백 기능 확장
-단순 집중도 수치 → 학습 전략 수립 지원
-예: "집중이 떨어졌습니다 → 5분 휴식 추천"
-개인맞춤형 학습 활동 추천
-🚀 장기 비전 (2년+)
-멀티모달 센서 통합
-뇌파(EEG), 안구 추적, 음성
-다각도 학습 상태 모니터링
-적응형 ITS
-학습자의 집중도 패턴 학습
-자동으로 콘텐츠 난이도 조절
-AI 튜터링 시스템으로 진화
+Future Research Directions
+🔮 Short-Term (6 months)
+Behavioral Context Analysis
+Multi-camera angles for action recognition
+Biometric signals: Heart rate, eye tracking
+ML-based contextual labeling
+Performance Optimization
+Auto-failover mechanisms
+Microservices architecture
+Intelligent caching
+📊 Medium-Term (1 year)
+Large-Scale Testing
+Massive open online courses (100+ users)
+Discussion-based seminars
+Real classroom deployment
+Enhanced Feedback Features
+Beyond concentration metrics: Learning strategy suggestions
+Example: "Concentration dropped → 5-min break recommended"
+Personalized learning recommendations
+🚀 Long-Term (2+ years)
+Multi-Modal Sensor Integration
+EEG (electroencephalography)
+Eye tracking
+Voice analysis
+Comprehensive learning state assessment
+Adaptive ITS Evolution
+Learn individual concentration patterns
+Auto-adjust content difficulty
+Full AI tutoring system
 ---
-💡 핵심 기여
-1️⃣ 교육 현장의 실무 중심 연구
-기존: 단순히 얼굴 감정 = 집중도
-현재: 감정 + 각도 + 화면 응시 = 정밀한 집중도 판별
-2️⃣ 동양인 데이터 편향성 해결
+💡 Key Contributions
+1. Practical Research for Educational Implementation
 ```
-기존 (서양인 데이터만):
-FER2013로 학습 → 동양인 적용 시 26.4%로 저하
+Before: Facial emotion = Concentration (oversimplified)
+Now: Emotion + Angle + Screen Gaze = Precise concentration
+```
+2. East Asian Data Bias Resolution
+```
+Standard Model (Western data only):
+FER2013 → 60.4% accuracy
+Applied to Asians → 26.4% (FAIL)
 
-개선 (다중 데이터셋):
-FER2013 + KFE + JAFFE 결합 → KFE에서 32.8% 달성
+Improved Model (Multi-dataset):
+FER2013 + KFE + JAFFE → 32.8% on Korean faces ✅
 ```
-3️⃣ 완전한 ITS 시스템 구현
-단순 모델 연구 → 완전한 시스템 (웹 + GPU 서버 + DB + UI)
-4️⃣ 실제 사용성 평가
-학생 20명 대상 설문 + 인터뷰 → 실증 기반 개선 방향 제시
+3. End-to-End ITS Implementation
+Single research project → Complete system (servers + DB + UI)
+4. Evidence-Based Validation
+Student usability testing (N=20) with qualitative interviews
 ---
-📚 참고 논문 및 자료
-주요 선행연구
-논문	연도	주요 기여
-Sharma et al. (2023)	2023	감정 + 시선 + 머리움직임 조합
-Bhardwaj et al. (2021)	2021	얼굴 감정으로 학습 능력 모니터링
-Cha & Kim (2015)	2015	얼굴 특징점 기반 집중도 분석
-데이터셋
-FER2013: 48×48 흑백 이미지, 7가지 감정, 35,887장
-KFE (AIHub): 한국인 얼굴 감정 데이터셋 (고해상도)
-JAFFE: 일본인 여성 얼굴 표정 이미지
-기술 스택
+🛠 Technology Stack
+Deep Learning & Computer Vision
 ```
-[Deep Learning]
 TensorFlow 2.x + Keras
-CNN Architecture: Xception (Inception 개선 버전)
-Transfer Learning: ImageNet 사전 학습 가중치
-
-[Computer Vision]
-OpenCV: 얼굴 감지 및 특징점 추출
-MediaPipe: 실시간 얼굴 키포인트 (선택)
-
-[Backend]
-Python + Flask/FastAPI
-GPU 추론 서버
-
-[Frontend]
+CNN: Xception (Inception improvement)
+Transfer Learning: ImageNet pre-trained weights
+OpenCV: Face detection & landmark extraction
+MediaPipe: Real-time facial keypoints (optional)
+```
+Backend & Inference
+```
+Python 3.8+
+Flask/FastAPI for API server
+GPU inference server (NVIDIA CUDA)
+MySQL for data persistence
+```
+Frontend
+```
 Java Spring Boot + Tomcat
-MySQL 데이터베이스
-실시간 대시보드 (웹 기반)
+Responsive web interface
+WebSocket for real-time updates
+Dashboard visualization
+```
+Datasets
+```
+FER2013: 35,887 images (Western faces)
+KFE: Korean emotional face dataset (AIHub)
+JAFFE: Japanese facial expressions
 ```
 ---
-🎓 학술적 가치
-학계 기여
-✅ 동양인 특화 감정 인식 모델 제시
-✅ 실시간 ITS 시스템의 실무적 구현 방안
-✅ 교육 현장 적용성 검증
-산업 적용 가능성
-온라인 교육 플랫폼 (K-MOOC, edX 등)
-기업 교육/훈련 프로그램
-스마트 교실 시스템
-AI 튜터링 솔루션
-교육 정책 시사점
-원격 수업의 품질 관리
-학습 격차 해소를 위한 데이터 기반 개입
-개인맞춤형 교육 기반 마련
+📚 Related Work & References
+Foundational Research
+Paper	Year	Contribution
+Sharma et al. (2023)	2023	Emotion + gaze + head movement combination
+Bhardwaj et al. (2021)	2021	Facial emotion for learning ability monitoring
+Cha & Kim (2015)	2015	Facial landmark-based concentration analysis
+Key Resources
+FER2013 Dataset: Kaggle FER2013
+Korean Dataset: AIHub
+Xception Paper: Chollet, F. (2016)
 ---
-📖 논문 인용
+📖 Citation
+BibTeX
 ```bibtex
 @article{Lee2025ITS,
-  title={딥러닝 얼굴 감정 인식 기술을 활용하여 실시간 학습자 집중 상태와 관련한 ITS 개발 및 사용성 평가},
+  title={Development and usability evaluation of ITS related to real-time learner concentration status using deep learning facial emotion recognition technology},
   author={Lee, Jun-Hyeong and Song, Ki-Sang},
   journal={Journal of Korean Association of Computer Education},
   volume={28},
   number={1},
-  pages={13-21},
+  pages={13--21},
   year={2025},
   doi={10.32431/kace.2025.28.1.002}
 }
 ```
-APA 형식
+APA Format
 Lee, J. H., & Song, K. S. (2025). Development and usability evaluation of ITS related to real-time learner concentration status using deep learning facial emotion recognition technology. Journal of Korean Association of Computer Education, 28(1), 13-21. https://doi.org/10.32431/kace.2025.28.1.002
 ---
-🔗 연결된 리소스
-📄 원본 논문: 한국컴퓨터교육학회
-🗂️ 데이터셋: AIHub (한국인 감정 데이터)
-🧠 모델 자료: Xception 논문
-📊 벤치마크 결과: model_comparison.csv
+🔗 Links & Resources
+📄 Original Paper: KACE Journal
+📊 Korean Dataset: AIHub
+🧠 Xception Architecture: arXiv
+📈 Model Comparison Results: results/metrics/
 ---
-📞 연락처
+📞 Contact
 Jun-Hyeong Lee (이준형)
-소속: 한국교원대학교 대학원 컴퓨터교육학과 박사수료
-이메일: jhlee77@knue.ac.kr
+Affiliation: Korea National University of Education, Graduate School of Computer Education
+Email: jhlee77@knue.ac.kr
 GitHub: @ljh77
 ---
+📄 License
+This project is licensed under the MIT License - see LICENSE file for details.
+---
+<div align="center">
+⭐ If this project helped you, please consider giving it a star!
+Built with ❤️ for AI-Enhanced Education
+</div>
 <div align="center">
 ⭐ 이 프로젝트가 유용하셨다면 Star를 눌러주세요!
 Made with ❤️ for AI-Enhanced Education

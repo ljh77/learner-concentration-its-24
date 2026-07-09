@@ -11,8 +11,15 @@
 ## 📌 Project Overview
 
 An **Intelligent Tutoring System (ITS)** that detects real-time learner concentration by analyzing **facial emotions, head pose, and screen gaze** using improved Xception CNN. 
-
 This research addresses the limitation of prior work that simply mapped facial emotions to concentration levels, proposing a more comprehensive approach combining multiple behavioral indicators for precise concentration assessment.
+
+## 🔗 Links & Resources
+- 📄 **Original Paper**: [KACE Journal Link](https://journal.kace.re.kr/xml/43892/43892.pdf)
+- 📊 **Korean Dataset**: [AIHub](https://aihub.or.kr/)
+- 🧠 **Xception Architecture**: [Link](https://arxiv.org/abs/1610.02357)- 
+- 📈 **Model Comparison Results**: [IJASEIT Link](https://ijaseit.insightsociety.org/index.php/ijaseit/article/view/18078)
+---
+
 
 ### 🎯 Key Achievements
 
@@ -541,14 +548,6 @@ Lee, J. H., & Song, K. S. (2025). Development and usability evaluation of ITS re
 
 ---
 
-## 🔗 Links & Resources
-
-- 📄 **Original Paper**: [KACE Journal](https://journal.kace.re.kr/xml/43892/43892.pdf)
-- 📊 **Korean Dataset**: [AIHub](https://aihub.or.kr/)
-- 🧠 **Xception Architecture**: [arXiv](https://arxiv.org/abs/1610.02357)- 
-- 📈 **Model Comparison Results**: [UJASEIT](https://ijaseit.insightsociety.org/index.php/ijaseit/article/view/18078)
-
----
 
 ## 📞 Contact
 
